@@ -3,7 +3,7 @@
 ## Description
 This program provides the functionality of the du utility in Unix. `du` provides an approximation of the disk usage of a given directory.
 For this implementation the disk usage was approximated using by using the block size and number of blocks allocated. To change this to The
-apparent disk usage (similar to running du -b), an alternate size calculation has been commented out within the function getSize(), (lines 149 & 155).
+apparent disk usage (similar to running du -b), an alternate size calculation has been commented out within the function getSize(), (lines 119 & 125).
 
 ## How to run
 To compile, cd into the directory containing du and run:

@@ -37,7 +37,6 @@ int main(int argc, char *argv[]){
     exit(1);
   }
   // printf("KNOWNINODES:\n%s\n\n", *knownInodes);
-
   // printf("ALLPATHS:\n%s\n\n", *allPaths);
   char *token = strtok(*allPaths, "\n");
   DIR *dirp;
@@ -50,30 +49,18 @@ int main(int argc, char *argv[]){
     token = strtok(NULL, "\n");
   }
 
-  // free(*allPaths);
-  // free(allPaths);
+
   free(initKINO);
-  // free(knownInodes);
   free(initAP);
-  // free(ld);
   return 0;
 }
 
-
-
-
-
-void listDirs(char dirname[], char *knownInodes[], char *allPaths[]){ //change to void function which passes allPaths from main modifying it directly
-  //allPaths should be passed the same way as knownInodes to manage memory
-
-//allPaths should be passed the same way as knownInodes to manage memory
+void listDirs(char dirname[], char *knownInodes[], char *allPaths[]){
     DIR *dirp;
     struct dirent *direntp;
     struct stat info;
     if((dirp = opendir(dirname)) != NULL){
-      // printf("DIRNAME: %s\n", dirname);
       while((direntp = readdir(dirp)) != NULL){
-        // printf("DIRENTP->D_NAME: %s\n", direntp->d_name);
         lstat(direntp->d_name, &info);
         if((strcmp(direntp->d_name, ".") != 0) && (strcmp(direntp->d_name, "..") != 0)){
           char newPath[4096];
@@ -83,29 +70,16 @@ void listDirs(char dirname[], char *knownInodes[], char *allPaths[]){ //change t
           char newIno[1024];
           sprintf(newIno, "%ld", info.st_ino);
           if((strstr(*knownInodes, newIno)) == NULL){
-          //   // lstat(direntp->d_name, &info);
-            // printf("RETURNED:\t%s\n", listDirs(newPath, knownInodes));
-            listDirs(newPath, knownInodes, allPaths); //the addr of allPaths is changing within the recursive call
+            listDirs(newPath, knownInodes, allPaths);
           }
-          // char **temp = realloc(allPaths, (2 * sizeof(*allPaths)));
-          // if(temp){
-          //   allPaths = temp;
-          // }
-          // strcat(*allPaths, listDirs(newPath, knownInodes, allPaths));
-          // strcat(*allPaths, "\n");  //so by the time it reaches here it's an invalid pointer
-          //   // printf("KNOWNINODES: \n%s\n", *knownInodes);
-          // printf("REALPATH:\t%s\n", realPath);
-          // free(newPath);
         }
       }
       char newIno[2048];
       lstat(dirname, &info);
       sprintf(newIno, "%ld", info.st_ino);
-      //increase size of knownInodes
       *knownInodes = realloc(*knownInodes, (4096 + strlen(*knownInodes)));
       strcat(*knownInodes, newIno);
       strcat(*knownInodes, "\n");
-      //increase size of allPaths before strcat-ing
       *allPaths = realloc(*allPaths, (4096 + strlen(*allPaths)));
       strcat(*allPaths, dirname);
       strcat(*allPaths, "\n");
@@ -115,11 +89,9 @@ void listDirs(char dirname[], char *knownInodes[], char *allPaths[]){ //change t
       char newIno[2048];
       lstat(dirname, &info);
       sprintf(newIno, "%ld", info.st_ino);
-      // // increase size of knownInodes
       *knownInodes = realloc(*knownInodes, (4096 + strlen(*knownInodes)));
       strcat(*knownInodes, newIno);
       strcat(*knownInodes, "\n");
-      // printf("NEWINO:\t%s\n", newIno);
       *allPaths = realloc(*allPaths, (4096 + strlen(*allPaths)));
       strcat(*allPaths, dirname);
       strcat(*allPaths, "\n");
@@ -140,9 +112,7 @@ long getSize(char dirname[]){
         realpath(dirname, realPath);
         strcat(realPath, "/");
         strcat(realPath, direntp->d_name);
-        // total += (info.st_blksize * info.st_blocks);
         total += getSize(realPath);
-
       }
     }
     lstat(dirname, &info);
